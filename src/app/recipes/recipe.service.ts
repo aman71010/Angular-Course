@@ -44,7 +44,7 @@ export class RecipeService{
         ),
     ];
 
-    recipeSelected = new EventEmitter<Recipe>();
+    //recipeSelected = new EventEmitter<Recipe>();
 
     constructor(private shoppingListService: ShoppingListService){}
 
@@ -54,5 +54,9 @@ export class RecipeService{
 
     addIngredientsToShoppingList(ingredients: Ingredient[]){
         this.shoppingListService.addIngredients(ingredients);
+    }
+
+    getRecipe(index: number){
+        return this.recipes[index];
     }
 }
