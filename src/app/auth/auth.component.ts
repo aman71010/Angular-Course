@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { User } from "./user.model";
+import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 import { AuthResponseData, AuthService } from "./auth.service";
 
@@ -9,20 +9,12 @@ import { AuthResponseData, AuthService } from "./auth.service";
     selector: 'app-auth',
     templateUrl: 'auth.component.html'
 })
-export class AuthComponent implements OnInit, OnDestroy{
+export class AuthComponent {
     loginMode = true;
     isLoading = false;
     error = null;
-    userSubs: Subscription;
-    user: User
 
-    constructor(private authService: AuthService) {}
-
-    ngOnInit(): void {
-        this.userSubs = this.authService.user.subscribe(user => {
-            this.user = user;
-        })
-    }
+    constructor(private authService: AuthService, private router: Router) {}
 
     onSwitchMode(){
         this.loginMode = !this.loginMode;
@@ -46,6 +38,7 @@ export class AuthComponent implements OnInit, OnDestroy{
         authObser.subscribe(resData => {
             console.log(resData);
             this.isLoading = false;
+            this.router.navigate(['/recipes']);
         },errorMessage => {
             this.error = errorMessage;
             console.log(this.error);
@@ -53,9 +46,5 @@ export class AuthComponent implements OnInit, OnDestroy{
         });
 
         form.reset();
-    }
-
-    ngOnDestroy(): void {
-        this.userSubs.unsubscribe();
     }
 }
