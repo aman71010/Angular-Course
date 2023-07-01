@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 import { Recipe } from "./recipe.model";
 import { Ingredient } from "../shared/ingredients.model";
@@ -13,8 +13,10 @@ export class RecipeService{
 
     recipesChanged = new Subject<Recipe[]>();
 
-    constructor(private shoppingListService: ShoppingListService,
-                private http: HttpClient){}
+    constructor(
+        private shoppingListService: ShoppingListService,
+        private http: HttpClient
+    ){}
 
     setRecipes(recipes: Recipe[]){
         this.recipes = recipes;
@@ -54,16 +56,18 @@ export class RecipeService{
     }
 
     fetchRecipes(){
-        return this.http.get<Recipe[]>('https://ng-food-shop-app-default-rtdb.firebaseio.com/recipes.json').
-        pipe(map(recipes => {
-            return recipes.map(recipe => {
-                return { 
-                    ...recipe,
-                    ingredients: recipe.ingredients? recipe.ingredients: []
-                };
+        return this.http.get<Recipe[]>('https://ng-food-shop-app-default-rtdb.firebaseio.com/recipes.json').pipe(
+            map(recipes => {
+                return recipes.map(recipe => {
+                    return { 
+                        ...recipe,
+                        ingredients: recipe.ingredients? recipe.ingredients: []
+                    };
+                })
+            }), 
+            tap(recipes => {
+                this.setRecipes(recipes);
             })
-        }), tap(recipes => {
-            this.setRecipes(recipes);
-        }))
+        );
     }
 }
