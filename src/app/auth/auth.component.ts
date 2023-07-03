@@ -36,15 +36,17 @@ export class AuthComponent {
             authObser = this.authService.signUp(email, password);
         }
         authObser.subscribe(resData => {
-            console.log(resData);
             this.isLoading = false;
             this.router.navigate(['/recipes']);
         },errorMessage => {
             this.error = errorMessage;
-            console.log(this.error);
             this.isLoading = false;
         });
 
         form.reset();
+    }
+
+    onHandleError(){
+        this.error = null;
     }
 }
