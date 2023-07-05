@@ -5,6 +5,7 @@ import { BehaviorSubject, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
 import { User } from "./user.model";
+import { environment } from "src/environments/environment";
 
 export interface AuthResponseData {
     email: string;
@@ -23,7 +24,7 @@ export class AuthService {
     constructor(private http: HttpClient, private router: Router) {}
 
     signUp(email: string, password: string){
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC1awoRKNKI3aeRMog8HKENlnL5OK7H9lE',{
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.FIREBASE_API_KEY,{
             email: email,
             password: password,
             returnSecureToken: true
@@ -36,7 +37,7 @@ export class AuthService {
     }
 
     logIn(email: string, password: string){
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC1awoRKNKI3aeRMog8HKENlnL5OK7H9lE',{
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.FIREBASE_API_KEY,{
             email: email,
             password: password,
             returnSecureToken: true
